@@ -1,0 +1,38 @@
+S. No.,State/ UT,Required - [R],Sanctioned - [S],In Position - [P],Vacant - [S-P],Shortfall - [R-P],Note of State/ UT,Note of Vacant - [S-P],Note of Shortfall - [R-P]
+1,Andhra Pradesh,2498,4307,3541,766,NA,NA,NA,*
+2,Arunachal Pradesh,584,NA,498,NA,86,NA,NA,NA
+3,Assam,2120,2798,2793,5,NA,#,NA,*
+4,Bihar,2949,1662,1142,520,1807,##,NA,NA
+5,Chhattisgarh,1968,2685,1918,767,50,NA,NA,NA
+6,Goa,52,132,129,3,NA,NA,NA,*
+7,Gujarat,3933,3994,3529,465,404,NA,NA,NA
+8,Haryana,1150,1929,1675,254,NA,NA,NA,*
+9,Himachal Pradesh,1161,837,542,295,619,NA,NA,NA
+10,Jammu & Kashmir,1225,1710,1480,230,NA,NA,NA,*
+11,Jharkhand,1613,703,1136,NA,477,###,*,NA
+12,Karnataka,3801,2667,3339,NA,462,NA,*,NA
+13,Kerala,2473,3610,3969,NA,NA,NA,*,*
+14,Madhya Pradesh,3334,4624,3211,1413,123,NA,NA,NA
+15,Maharashtra,4334,3218,2519,699,1815,NA,NA,NA
+16,Manipur,204,484,397,87,NA,NA,NA,*
+17,Meghalaya,298,413,610,NA,NA,^,*,*
+18,Mizoram,120,570,212,358,NA,$,NA,*
+19,Nagaland,273,175,387,NA,NA,NA,*,*
+20,Odisha,3870,866,1817,NA,2053,NA,*,NA
+21,Punjab,1489,2189,2019,170,NA,NA,NA,*
+22,Rajasthan,6132,12472,9311,3161,NA,NA,NA,*
+23,Sikkim,38,NA,33,NA,5,NA,NA,NA
+24,Tamil Nadu,4057,8133,7487,646,NA,NA,NA,*
+25,Telangana,1487,2130,1904,226,NA,NA,NA,*
+26,Tripura,240,0,597,NA,NA,NA,*,*
+27,Uttarakhand,677,307,349,NA,328,NA,*,NA
+28,Uttar Pradesh,9375,4497,4412,85,4963,NA,NA,NA
+29,West Bengal,3357,10380,9248,1132,NA,NA,NA,*
+30,A & N Island,50,199,193,6,NA,NA,NA,*
+31,Chandigarh,17,47,80,NA,NA,^^,*,*
+32,Dadra & Nagar Haveli,23,14,45,NA,NA,NA,*,*
+33,Daman & Diu,18,14,16,NA,2,NA,*,NA
+34,Delhi,5,5,7,NA,NA,NA,*,*
+35,Lakshadweep,25,54,54,0,NA,NA,NA,*
+36,Puducherry,68,131,139,NA,NA,NA,*,*
+All India/ Total,All India/ Total,65018,77956,70738,11288,13194,NA,NA,NA

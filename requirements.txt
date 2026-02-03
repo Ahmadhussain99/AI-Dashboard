@@ -1,0 +1,23 @@
+# Core dependencies
+streamlit>=1.32.0
+pandas>=2.0.0
+numpy>=1.24.0
+
+# Database connectors
+sqlalchemy>=2.0.0
+psycopg2-binary>=2.9.0
+pymysql>=1.1.0
+
+# LLM Providers - UPDATED
+google-genai>=0.2.0      # NEW Google GenAI SDK (not google-generativeai)
+anthropic>=0.40.0        # For Claude
+openai>=1.0.0           # For OpenAI
+
+# SQL Parsing & Validation
+sqlparse>=0.4.4
+
+# Visualization
+plotly>=5.18.0
+
+# Configuration
+python-dotenv>=1.0.0
