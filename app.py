@@ -10,6 +10,9 @@ import streamlit as st
 from sqlalchemy import create_engine
 import os
 from dotenv import load_dotenv
+load_dotenv()
+
+api_key = os.getenv("GEMINI_API_KEY")
 import pandas as pd
 import sqlite3
 import tempfile
