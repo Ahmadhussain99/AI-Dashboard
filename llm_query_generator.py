@@ -210,32 +210,120 @@ Generate the SQL query following the rules in your system prompt. Return only va
         return prompt
     
     def _parse_response(self, response_text: str) -> Dict[str, Any]:
-        """Parse the LLM response"""
+        """Parse LLM response with robust error handling"""
         
-        try:
-            # Try to extract JSON from the response
-            if "```json" in response_text:
-                start = response_text.find("```json") + 7
-                end = response_text.find("```", start)
-                json_str = response_text[start:end].strip()
-            elif "```" in response_text:
-                start = response_text.find("```") + 3
-                end = response_text.find("```", start)
-                json_str = response_text[start:end].strip()
-            else:
-                json_str = response_text.strip()
-            
-            result = json.loads(json_str)
-            result["success"] = True
-            return result
-            
-        except json.JSONDecodeError as e:
-            return {
-                "success": False,
-                "error": f"Failed to parse JSON response: {str(e)}",
-                "raw_response": response_text
-            }
+        import re
+        
+        # Try multiple parsing strategies
+        strategies = [
+            self._parse_direct,
+            self._parse_from_markdown,
+            self._parse_from_braces,
+            self._parse_manual
+        ]
+        
+        for strategy in strategies:
+            try:
+                result = strategy(response_text)
+                if result and result.get("sql"):
+                    result["success"] = True
+                    return result
+            except:
+                continue
+        
+        # All failed
+        return {
+            "success": False,
+            "error": "Could not parse LLM response",
+            "raw_response": response_text[:500]
+        }
 
+    def _parse_direct(self, text: str) -> Dict:
+        """Try direct JSON parsing"""
+        return json.loads(text.strip())
+
+    def _parse_from_markdown(self, text: str) -> Dict:
+        """Extract from markdown code blocks"""
+        if "```json" in text:
+            start = text.find("```json") + 7
+            end = text.find("```", start)
+            json_str = text[start:end].strip()
+        elif "```" in text:
+            start = text.find("```") + 3
+            end = text.find("```", start)
+            json_str = text[start:end].strip()
+        else:
+            json_str = text
+        
+        return json.loads(json_str)
+
+    def _parse_from_braces(self, text: str) -> Dict:
+        """Extract JSON by finding braces"""
+        start = text.find('{')
+        end = text.rfind('}')
+        if start != -1 and end != -1:
+            json_str = text[start:end + 1]
+            return json.loads(json_str)
+        raise ValueError("No JSON object found")
+
+    def _parse_manual(self, text: str) -> Dict:
+        """Manually extract fields using regex"""
+        import re
+        
+        result = {}
+        
+        # Extract SQL - handles escaped quotes and newlines
+        sql_patterns = [
+            r'"sql"\s*:\s*"((?:[^"\\]|\\.)*)"',
+            r"'sql'\s*:\s*'([^']*)'",
+            r'"sql"\s*:\s*"([^"]+)"',
+        ]
+        
+        for pattern in sql_patterns:
+            sql_match = re.search(pattern, text, re.DOTALL)
+            if sql_match:
+                sql = sql_match.group(1)
+                sql = sql.replace('\\n', ' ').replace('\\t', ' ')
+                sql = sql.replace('\\"', '"').replace('\\\\', '\\')
+                result["sql"] = sql.strip()
+                break
+        
+        # Extract explanation
+        exp_patterns = [
+            r'"explanation"\s*:\s*"([^"]*)"',
+            r"'explanation'\s*:\s*'([^']*)'",
+        ]
+        for pattern in exp_patterns:
+            exp_match = re.search(pattern, text)
+            if exp_match:
+                result["explanation"] = exp_match.group(1)
+                break
+        if "explanation" not in result:
+            result["explanation"] = ""
+        
+        # Extract tables
+        tables_match = re.search(r'"tables_used"\s*:\s*\[(.*?)\]', text)
+        if tables_match:
+            tables_str = tables_match.group(1)
+            tables = re.findall(r'["\']([^"\']+)["\']', tables_str)
+            result["tables_used"] = tables
+        else:
+            result["tables_used"] = []
+        
+        # Extract visualization
+        viz_patterns = [
+            r'"visualization_hint"\s*:\s*"([^"]+)"',
+            r"'visualization_hint'\s*:\s*'([^']+)'",
+        ]
+        for pattern in viz_patterns:
+            viz_match = re.search(pattern, text)
+            if viz_match:
+                result["visualization_hint"] = viz_match.group(1)
+                break
+        if "visualization_hint" not in result:
+            result["visualization_hint"] = "table"
+        
+        return result
 
 class QueryRefiner:
     """Refines queries based on execution results and errors"""
